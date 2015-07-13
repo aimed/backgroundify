@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Backgroundify</title>
+    <link rel="stylesheet" href="icomoon/style.css" charset="utf-8">
+    <link rel="stylesheet" href="backgroundify.css" charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body>
+    <div class="main">
+
+      <!-- Menu -->
+      <div class="menu">
+        <div class="menu-inner">
+          <i class="icon icon-cloud-upload" id="button-upload">
+            <input id="input" type="file" name="image" value="">
+          </i>
+          <i class="icon icon-drop" id="button-blur"></i>
+          <i class="icon icon-sun" id="button-brightness"></i>
+          <i class="icon icon-open" id="button-save"></i>
+        </div>
+      </div>
+
+      <!-- Loading Indicator -->
+      <i class="icon icon-repeat loading-indicator hidden" id="loading-spinner"></i>
+      <div class="loading-overlay loading-indicator hidden" id="loading-background"></div>
+
+      <!-- Canvas -->
+      <div class="canvas-container" id="canvas-container">
+        <canvas id="canvas"></canvas>
+      </div>
+
+      <!-- Background -->
+      <!-- <div id="background"></div> -->
+
+    </div>
+    <script src="backgroundify.js" async="true" charset="utf-8"></script>
+  </body>
+</html>

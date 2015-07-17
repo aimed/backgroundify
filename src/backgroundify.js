@@ -4,11 +4,16 @@ import imageStore from './image-store.js'
 
 var canvas = new EditableCanvas(document.getElementById('canvas'))
 var chooser = new ImageChooser(document.getElementById('input'))
+var menu = document.getElementById('menu')
 var background = document.getElementById('background')
 var blurButton = document.getElementById('button-blur')
 var brightnessButton = document.getElementById('button-brightness')
 var saveButton = document.getElementById('button-save')
 var loadingIndicators = document.getElementsByClassName('loading-indicator')
+
+window.onresize = function () {
+  resizeCanvas()
+}
 
 function toggleLoadingIndicators (val) {
   let className = 'hidden'
@@ -59,6 +64,26 @@ chooser.addListener(function (err, file, chooser) {
   }, 0)
 })
 
+function canvasSizeForImage (image, canvas, paddingLR = 0, paddingTB = 0) {
+  let maxHeight = window.innerHeight - paddingTB
+  let maxWidth = window.innerWidth - paddingLR
+
+  let srcHeight = image.naturalHeight
+  let srcWidth = image.naturalWidth
+
+  let ratio = Math.min(maxWidth / srcWidth, maxHeight / srcHeight);
+  return { width: srcWidth*ratio, height: srcHeight*ratio };
+}
+
+function resizeCanvas () {
+  let image = imageStore.getImage()
+  let padding = menu.clientHeight * 2.2
+  let canvasSize = canvasSizeForImage(image, canvas.canvas, padding, padding)
+
+  canvas.canvas.style.width  = canvasSize.width + "px"
+  canvas.canvas.style.height = canvasSize.height + "px"
+}
+
 // Listen for changes from the imageStore
 imageStore.addListener(async function (event) {
   switch (event) {
@@ -66,11 +91,9 @@ imageStore.addListener(async function (event) {
       let image = imageStore.getImage()
       let imageData = EditableCanvas.imageToDataURL(image)
 
-      canvas.width = image.width
-      canvas.height = image.height
-
       // set the background image
-      // setBackgroundImage(imageData)
+      resizeCanvas()
+      setBackgroundImage(imageData)
 
       // draw on canvas
       await canvas.setImage(image)

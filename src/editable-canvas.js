@@ -24,6 +24,9 @@ export class EditableCanvas {
     // also we might need to wait on the onload here
     this.original = await EditableCanvas.cloneImage(image)
 
+    this.width = image.width
+    this.height = image.height
+    
     // draw the image on the canvas
     this.context.drawImage(this.original, 0, 0)
 

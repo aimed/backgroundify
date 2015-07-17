@@ -2513,11 +2513,16 @@ var _imageStoreJs2 = _interopRequireDefault(_imageStoreJs);
 
 var canvas = new _editableCanvasJs.EditableCanvas(document.getElementById('canvas'));
 var chooser = new _imageChooserJs.ImageChooser(document.getElementById('input'));
+var menu = document.getElementById('menu');
 var background = document.getElementById('background');
 var blurButton = document.getElementById('button-blur');
 var brightnessButton = document.getElementById('button-brightness');
 var saveButton = document.getElementById('button-save');
 var loadingIndicators = document.getElementsByClassName('loading-indicator');
+
+window.onresize = function () {
+  resizeCanvas();
+};
 
 function toggleLoadingIndicators(val) {
   var className = 'hidden';
@@ -2600,6 +2605,29 @@ chooser.addListener(function (err, file, chooser) {
   }, 0);
 });
 
+function canvasSizeForImage(image, canvas) {
+  var paddingLR = arguments.length <= 2 || arguments[2] === undefined ? 0 : arguments[2];
+  var paddingTB = arguments.length <= 3 || arguments[3] === undefined ? 0 : arguments[3];
+
+  var maxHeight = window.innerHeight - paddingTB;
+  var maxWidth = window.innerWidth - paddingLR;
+
+  var srcHeight = image.naturalHeight;
+  var srcWidth = image.naturalWidth;
+
+  var ratio = Math.min(maxWidth / srcWidth, maxHeight / srcHeight);
+  return { width: srcWidth * ratio, height: srcHeight * ratio };
+}
+
+function resizeCanvas() {
+  var image = _imageStoreJs2['default'].getImage();
+  var padding = menu.clientHeight * 2.2;
+  var canvasSize = canvasSizeForImage(image, canvas.canvas, padding, padding);
+
+  canvas.canvas.style.width = canvasSize.width + 'px';
+  canvas.canvas.style.height = canvasSize.height + 'px';
+}
+
 // Listen for changes from the imageStore
 _imageStoreJs2['default'].addListener(function callee$0$0(event) {
   var image, imageData;
@@ -2614,8 +2642,9 @@ _imageStoreJs2['default'].addListener(function callee$0$0(event) {
         image = _imageStoreJs2['default'].getImage();
         imageData = _editableCanvasJs.EditableCanvas.imageToDataURL(image);
 
-        canvas.width = image.width;
-        canvas.height = image.height;
+        // set the background image
+        resizeCanvas();
+        setBackgroundImage(imageData);
 
         context$1$0.next = 9;
         return _regeneratorRuntime.awrap(canvas.setImage(image));
@@ -2640,9 +2669,6 @@ _imageStoreJs2['default'].addListener(function callee$0$0(event) {
 // canvas.clear()
 
 // copy the image to close the file handler
-// set the background image
-// setBackgroundImage(imageData)
-
 // draw on canvas
 
 },{"./editable-canvas.js":55,"./image-chooser.js":56,"./image-store.js":57,"babel-runtime/core-js/get-iterator":1,"babel-runtime/helpers/interop-require-default":9,"babel-runtime/regenerator":50}],55:[function(require,module,exports){
@@ -2696,10 +2722,13 @@ var EditableCanvas = (function () {
           case 2:
             this.original = context$2$0.sent;
 
+            this.width = image.width;
+            this.height = image.height;
+
             // draw the image on the canvas
             this.context.drawImage(this.original, 0, 0);
 
-          case 4:
+          case 6:
           case 'end':
             return context$2$0.stop();
         }

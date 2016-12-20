@@ -9,13 +9,13 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "babel-runtime": "^5.6.18",
-    "babelify": "^6.1.3",
-    "grunt": "^0.4.5",
-    "grunt-browserify": "^3.8.0",
-    "grunt-contrib-watch": "^0.6.1"
+    "babel-runtime": "^6.20.0",
+    "babelify": "^7.3.0",
+    "grunt": "^1.0.1",
+    "grunt-browserify": "^5.0.0",
+    "grunt-contrib-watch": "^1.0.0"
   },
   "dependencies": {
-    "bluebird": "^2.9.33"
+    "bluebird": "^3.4.6"
   }
 }
